@@ -9,15 +9,38 @@ class App extends React.Component {
     super(props);
     this.state = { 
       repos: []
+      //repoCount: 0
     }
 
   }
 
-  search (term) {
-    console.log(`${term} was searched`);
-    // TODO
+
+  getEverything() {
+    $.ajax({
+      method:"GET",
+      url: "/repos",
+      success: (data) => {
+        console.log("THIS IS WHAT SHOULD BE ADDED ", data)
+        this.setState({repos: data})
+      }
+     
+    });
   }
 
+  search (term) {
+    $.ajax({
+      method: "POST",
+      url: "/repos",
+      data: {username: term},
+      success: (data) => {
+        console.log("You've added " + term)
+        this.getEverything();
+        //this.setState({repoCount: data})
+      }
+      
+    });
+  }
+  
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
